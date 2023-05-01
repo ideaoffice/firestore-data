@@ -2,13 +2,11 @@ import express from "express";
 import FirestoreData from "./firestore-data";
 
 export default class FirestoreApi {
-
-  private app:express.Express;
-  private route:string;
-  private data:FirestoreData;
+  private app: express.Express;
+  private route: string;
+  private data: FirestoreData;
 
   constructor(collection: string) {
-
     this.route = "/" + collection;
     this.data = new FirestoreData(collection);
     this.app = express();
@@ -20,22 +18,25 @@ export default class FirestoreApi {
       const body = req.body;
 
       if (!body) {
-        return res
-          .status(400)
-          .json({ error: "Informe os dados do novo Registro." });
+        return res.status(400).json({
+          status: "Bad Request",
+          message: "Informe não informados.",
+        });
       }
 
       try {
         const docRef = await (await this.data.add(body)).get();
-        console.log("Documento adicionado com sucesso:", docRef.id);
         return res.status(201).json({
           status: "Created",
-          message: "Registro adicionado com sucesso.",
-          data: docRef.data(),
+          message: "Registro adicionado ID: " + docRef.id,
+          collection: docRef.data(),
         });
       } catch (error) {
-        console.error("Erro ao adicionar documento:", error);
-        return res.status(500).json({ error: "Erro ao adicionar o Registro." });
+        console.error("Erro ao adicionar registro:", error);
+        return res.status(500).json({
+          status: "Internal Server Error",
+          message: "Erro ao adicionar o registro.",
+        });
       }
     });
 
@@ -47,13 +48,22 @@ export default class FirestoreApi {
         const result = await this.data.get(idOrCondition);
 
         if (result.length === 0) {
-          return res.status(404).json({ error: "Registro não encontrado." });
+          return res.status(404).json({
+            status: "Not Found",
+            message: "Registro não encontrado.",
+          });
         }
 
-        return res.status(200).json({ status: "OK", collection: result });
+        return res.status(200).json({
+          status: "OK",
+          collection: result,
+        });
       } catch (error) {
-        console.error("Erro ao buscar Registro:", error);
-        return res.status(500).json({ error: "Erro ao buscar o Registro." });
+        console.error("Erro ao pesquisar Registro.", error);
+        return res.status(500).json({
+          status: "Internal Server Error",
+          message: "Erro ao pesquisar Registro.",
+        });
       }
     });
 
@@ -62,9 +72,10 @@ export default class FirestoreApi {
       const id = req.body.id;
 
       if (!id) {
-        return res
-          .status(400)
-          .json({ error: "Informe o id e dados do Registro." });
+        return res.status(400).json({
+          status: "Bad Request",
+          message: "Informe o id do registro.",
+        });
       }
 
       try {
@@ -74,12 +85,16 @@ export default class FirestoreApi {
           return res.status(404).json({ error: "Registro não encontrado." });
         }
 
-        return res
-          .status(200)
-          .json({ status: "OK", message: "Registro atualizado com sucesso." });
+        return res.status(200).json({
+          status: "OK",
+          message: "Registro atualizado com sucesso.",
+        });
       } catch (error) {
-        console.error("Erro ao atualizar Registro:", error);
-        return res.status(500).json({ error: "Erro ao atualizar o Registro." });
+        console.error("Erro ao atualizar Registro.", error);
+        return res.status(500).json({
+          status: "Internal Server Error",
+          message: "Erro ao atualizar o Registro.",
+        });
       }
     });
 
@@ -91,14 +106,21 @@ export default class FirestoreApi {
         const result = await this.data.delete(idOrCondition);
 
         if (result.length == 0) {
-          return res.status(404).json({ error: "Registro não encontrado." });
+          return res.status(404).json({
+            status: "Not Found",
+            message: "Registro não encontrado.",
+          });
         }
-        return res
-          .status(200)
-          .json({ status: "OK", message: "Registro deletado com sucesso." });
+        return res.status(200).json({
+          status: "OK",
+          message: "Registro deletado com sucesso.",
+        });
       } catch (error) {
-        console.error("Erro ao deletar Registro:", error);
-        return res.status(500).json({ error: "Erro ao deletar o Registro." });
+        console.error("Erro ao deletar Registro.", error);
+        return res.status(500).json({
+          status: "Internal Server Error",
+          message: "Erro ao deletar o Registro.",
+        });
       }
     });
   }

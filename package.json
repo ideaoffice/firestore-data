@@ -1,0 +1,29 @@
+{
+  "name": "@ideaoffice/firestore-data",
+  "version": "1.0.0",
+  "description": "Managing Documents with Google Cloud Firestore",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [ "dist" ],
+  "scripts": {
+    "package": "rimraf dist && tsc && npm pack",
+    "build": "rimraf dist && tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "José Aldeci de Andrade <andrade@ideaoffice.com.br>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ideaoffice/firestore-data.git"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^6.5.0",
+    "@google-cloud/functions-framework": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.3",
+    "rimraf": "^5.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}

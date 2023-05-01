@@ -5,8 +5,10 @@ export default class FirestoreApi {
   private app: express.Express;
   private route: string;
   private data: FirestoreData;
+  private collection: string;
 
   constructor(collection: string) {
+    this.collection = collection;
     this.route = "/" + collection;
     this.data = new FirestoreData(collection);
     this.app = express();
@@ -56,7 +58,7 @@ export default class FirestoreApi {
 
         return res.status(200).json({
           status: "OK",
-          collection: result,
+          [this.collection]: result,
         });
       } catch (error) {
         console.error("Erro ao pesquisar Registro.", error);

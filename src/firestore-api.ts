@@ -50,7 +50,7 @@ export default class FirestoreApi {
           return res.status(404).json({ error: "Registro não encontrado." });
         }
 
-        return res.status(200).json({ status: "OK", animal: result });
+        return res.status(200).json({ status: "OK", collection: result });
       } catch (error) {
         console.error("Erro ao buscar Registro:", error);
         return res.status(500).json({ error: "Erro ao buscar o Registro." });
